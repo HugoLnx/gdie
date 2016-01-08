@@ -6,6 +6,14 @@
     <style>body {margin: 0; padding: 0; background-color: #000;color: white;} a{color: white;}</style>
   </head>
   <body>
+    <script src="/lib/primus.js"></script>
+    <script>
+      var primus = Primus.connect();
+      primus.on("data", function(data) {
+        console.log("received", data);
+      });
+      primus.write({browserMessage: "Hello Server!"});
+    </script>
     <script src="/lib/pixi-v3.js"></script>
 
     <script src="/js/games/controls.js"></script>
