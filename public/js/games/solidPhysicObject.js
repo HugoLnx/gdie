@@ -1,5 +1,8 @@
 (function(namespace) {
+  var Callbacks = LNXCommons.CallbackHelper;
+
   namespace.SolidPhysicObject = function(x, y, width, height, type) {
+    var callbacks = Callbacks.initializeFor(this);
     this.x = x;
     this.y = y;
     this.width = width;
@@ -46,6 +49,14 @@
       this.vel.y += this.accel.y;
       this.x += this.vel.x;
       this.y += this.vel.y;
+    };
+
+    this.emitUpdated = function() {
+      callbacks.emit("update");
+    };
+
+    this.emitOnUniverse = function() {
+      callbacks.emit("onUniverse");
     };
 
     this.stopMovementToDownwards = function() {

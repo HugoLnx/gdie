@@ -10,11 +10,16 @@
     <script>
       var primus = Primus.connect();
       primus.on("data", function(data) {
-        console.log("received", data);
+        console.log("data received", data);
+      });
+      primus.on("update", function(data) {
+        console.log("update received", data);
       });
       primus.write({browserMessage: "Hello Server!"});
     </script>
     <script src="/lib/pixi-v3.js"></script>
+
+    <script src="/js/commons/callbackHelper.js"></script>
 
     <script src="/js/games/controls.js"></script>
     <script src="/js/games/stateMachine.js"></script>
@@ -26,6 +31,7 @@
     <script src="/js/gdie/hero.js"></script>
 
     <script src="/js/gdie/game.js"></script>
+    <script src="/js/gdie/gameLoop.js"></script>
     <script src="/js/gdie/main.js"></script>
   </body>
 </html>

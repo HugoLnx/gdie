@@ -1,17 +1,14 @@
 (function(namespace) {
-  namespace.UniversalPhysic = function(container) {
+  var Callbacks = LNXCommons.CallbackHelper;
+
+  namespace.UniversalPhysic = function() {
+    var callbacks = Callbacks.initializeFor(this);
     var objects = [];
 
     this.push = function(obj) {
-      obj.sprite = new PIXI.Graphics();
-      obj.sprite.beginFill(0x995555);
-      obj.sprite.drawRect(0, 0, obj.width, obj.height);
-      obj.sprite.endFill();
-      //obj.sprite.alpha = 0.5;
-      if(obj.type !== "weak") {
-        container.addChild(obj.sprite);
-      }
       objects.push(obj);
+      obj.emitOnUniverse();
+      callbacks.emit("objectPushed", obj);
     };
 
     this.update = function() {
@@ -30,8 +27,8 @@
 
       for(var i = 0; i < objects.length; i++) {
         objects[i].verifyFalling();
-        objects[i].sprite.x = objects[i].x;
-        objects[i].sprite.y = 480-objects[i].y;
+        objects[i].emitUpdated();
+        callbacks.emit("objectUpdated", objects[i]);
       }
     };
 

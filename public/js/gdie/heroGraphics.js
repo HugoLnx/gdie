@@ -1,11 +1,13 @@
 (function(namespace) {
   var Animation = LNXGames.Animation;
 
-  namespace.HeroGraphics = function(container, animationName) {
+  namespace.HeroGraphics = function(container) {
+    var self = this;
     var animation = null;
     var tex = null;
     var sprite = null;
     var animations = null;
+    var animationName = null;
 
     function init() {
       tex = PIXI.loader.resources["./img/metroid2.png"].texture;
@@ -19,6 +21,10 @@
     this.update = function(x, y) {
       animations[animationName].toNextFrame(x, y);
     };
+
+    this.changeAnimationToCompatibleWithState = function(state, direction) {
+      self.changeAnimationTo(animationNameFor(state, direction));
+    };
     
     this.changeAnimationTo = function(animName) {
       if(animationName !== animName) {
@@ -26,6 +32,21 @@
       }
       animationName = animName;
     }
+
+    function animationNameFor(state, direction) {
+      var animationPrefix = {
+        "running" : "running",
+        "standing" : "standing",
+        "jumping-moving" : "jumping",
+        "jumping-still" : "jumping",
+        "on-the-air-moving" : "jumping",
+        "on-the-air-still" : "jumping",
+        "falling-moving" : "jumping",
+        "falling-still" : "jumping"
+      };
+
+      return animationPrefix[state] + "-" + direction;
+    };
 
     function createAnimationsFor(sprite) {
       return {

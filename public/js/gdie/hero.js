@@ -1,14 +1,14 @@
 (function(namespace) {
   var SolidPhysicObject = LNXGames.SolidPhysicObject;
-  var SamusGraphics = LNXGdie.HeroGraphics;
   var StateMachine = LNXGames.StateMachine;
+  var Callbacks = LNXCommons.CallbackHelper;
 
-  namespace.Hero = function(x, y, container, universe) {
+  namespace.Hero = function(x, y) {
+    var callbacks = Callbacks.initializeFor(this);
     var myself = this;
     var RUNNING_VEL = 5;
     var JUMPING_VEL = 2;
-    var graphics = null;
-    var physic = null;
+    var physic = new SolidPhysicObject(x, y, 20, 47, "weak");
     var direction = "right";
     var statesMachine = new StateMachine({
       start: "standing",
@@ -20,7 +20,6 @@
             } else {
               physic.velocityX(-1*RUNNING_VEL);
             }
-            graphics.changeAnimationTo("running-" + direction);
           },
           transitions: {
             "falling": "falling-moving",
@@ -33,7 +32,6 @@
         "standing" : {
           action: function() {
             physic.velocityX(0);
-            graphics.changeAnimationTo("standing-" + direction);
           },
           transitions: {
             "falling": "falling-still",
@@ -52,7 +50,6 @@
             } else {
               physic.force(-1*frontImpulse, upImpulse);
             }
-            graphics.changeAnimationTo("jumping-" + direction);
           },
           immediateTransition: "on-the-air-moving"
         },
@@ -61,14 +58,12 @@
             physic.noForces();
             var upImpulse = 0.8;
             physic.force(0, upImpulse);
-            graphics.changeAnimationTo("jumping-" + direction);
           },
           immediateTransition: "on-the-air-still"
         },
         "on-the-air-still" : {
           action: function() {
             physic.velocityX(0);
-            graphics.changeAnimationTo("jumping-" + direction);
           },
           transitions: {
             "falling": "falling-still",
@@ -85,7 +80,6 @@
             } else {
               physic.velocityX(-1*JUMPING_VEL);
             }
-            graphics.changeAnimationTo("jumping-" + direction);
           },
           transitions: {
             "falling": "falling-moving",
@@ -127,16 +121,19 @@
       }
     });
 
-    function init() {
-      graphics = new SamusGraphics(container, "standing-right");
-      physic = new SolidPhysicObject(x, y, 20, 47, "weak");
+    this.init = function() {
+      // TODO: Use #listen on those events
       physic.onBottomBlock = function() {
         statesMachine.applyTransition("land");
       };
       physic.onFalling = function() {
         statesMachine.applyTransition("falling");
       };
-      universe.push(physic);
+
+      statesMachine.listen("stateChange", function(newState, transition, previousState) {
+        callbacks.emit("stateChange", [newState, direction]);
+      });
+      callbacks.emit("stateChange", [statesMachine.state(), direction]);
     }
 
     this.act = function(action) {
@@ -145,9 +142,8 @@
 
     this.update = function() {
       statesMachine.executeCurrentState();
-      graphics.update(physic.x-10, 480-physic.y);
     };
 
-    init();
+    this.physic = function(){ return physic; };
   };
 }(LNXGdie = window.LNXGdie || {}));

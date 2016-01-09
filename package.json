@@ -8,7 +8,8 @@
   },
 	"devDependencies" : {
 		"express" : "^4.13.3",
-		"primus" : "^4.0.4"
+		"primus" : "^4.0.4",
+    "ws": "^1.0.1"
 	},
   "repository": {
     "type": "git",

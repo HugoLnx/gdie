@@ -1,5 +1,5 @@
 (function(){
   PIXI.loader
    .add("./img/metroid2.png")
-   .load(new LNXGdie.Game().init);
+   .load(new LNXGdie.GameLoop().start);
 }());
