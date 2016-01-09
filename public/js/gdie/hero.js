@@ -145,4 +145,4 @@
 
     this.physic = function(){ return physic; };
   };
-}(LNXGdie = window.LNXGdie || {}));
+}(typeof(LNXGdie) === "undefined" ? LNXGdie = {} : LNXGdie));

@@ -23,4 +23,4 @@
       self.samus.update();
     };
   };
-}(LNXGdie = window.LNXGdie || {}));
+}(typeof(LNXGdie) === "undefined" ? LNXGdie = {} : LNXGdie));

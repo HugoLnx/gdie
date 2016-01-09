@@ -1,6 +1,7 @@
 var express = require('express'),
     Primus = require("primus");
 
+var gameLoop = require("./src/gameLoop.js");
 
 var app = express();
 app.use(express.static('public'));
@@ -36,3 +37,5 @@ function configWebsocketServerAttachedTo(server) {
     console.log("message", message);
   });
 }
+
+gameLoop.start();

@@ -74,4 +74,4 @@
       }
     };
   };
-}(LNXGames = window.LNXGames || {}));
+}(typeof(LNXGames) === "undefined" ? LNXGames = {} : LNXGames));

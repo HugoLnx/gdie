@@ -12,7 +12,7 @@
     this.emit = function(callbackName, params) {
       if(typeof(params) === "undefined") {
         params = [];
-      } else if(!params.constructor || params.constructor !== window.Array) {
+      } else if(!params.constructor || params.constructor !== Array) {
         params = [params];
       }
       var cbFunctions = functions[callbackName];
@@ -29,4 +29,4 @@
     obj.listen = callbacks.listen;
     return callbacks;
   };
-}(LNXCommons = window.LNXCommons || {}));
+}(typeof(LNXCommons) === "undefined" ? LNXCommons = {} : LNXCommons));

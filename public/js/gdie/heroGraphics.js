@@ -107,4 +107,4 @@
     
     init();
   };
-}(LNXGdie = window.LNXGdie || {}));
+}(typeof(LNXGdie) === "undefined" ? LNXGdie = {} : LNXGdie));

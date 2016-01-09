@@ -18,7 +18,7 @@
       });
       document.body.appendChild(renderer.view);
 
-      game = new Game(container);
+      game = new Game();
       game.universe.listen("objectPushed", function(obj) {
         var sprite = new PIXI.Graphics();
         sprite.beginFill(0x995555);
@@ -34,7 +34,9 @@
         obj.sprite.y = 480-obj.y;
       });
 
-      game.samus.listen("stateChange", samusGraphics.changeAnimationToCompatibleWithState);
+      game.samus.listen("stateChange", function(newState, direction) {
+        samusGraphics.changeAnimationToCompatibleWithState(newState, direction);
+      });
 
       game.samus.physic().listen("update", function() {
         samusGraphics.update(this.x-10, 480-this.y);
@@ -66,4 +68,4 @@
       renderer.render(container);
     };
   };
-}(LNXGdie = window.LNXGdie || {}));
+}(typeof(LNXGdie) === "undefined" ? LNXGdie = {} : LNXGdie));

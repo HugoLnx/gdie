@@ -35,4 +35,4 @@
       current = states[theState].immediateTransition || current;
     };
   };
-}(LNXGames = window.LNXGames || {}));
+}(typeof(LNXGames) === "undefined" ? LNXGames = {} : LNXGames));
