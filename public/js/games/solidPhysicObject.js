@@ -79,24 +79,24 @@
       if(this.vel.x > 0) this.vel.x = 0;
     };
 
-    this.blockedBottom = function(objBlocking) {
-      if(this.onBottomBlock) this.onBottomBlock(objBlocking);
+    this.emitBlockedBottom = function(objBlocking) {
+      callbacks.emit("blockedBottom", objBlocking);
     };
 
-    this.blockedTop = function(objBlocking) {
-      if(this.onTopBlock) this.onTopBlock(objBlocking);
+    this.emitBlockedTop = function(objBlocking) {
+      callbacks.emit("blockedTop", objBlocking);
     };
 
-    this.blockedRight = function(objBlocking) {
-      if(this.onRightBlock) this.onRightBlock(objBlocking);
+    this.emitBlockedRight = function(objBlocking) {
+      callbacks.emit("blockedRight", objBlocking);
     };
 
-    this.blockedLeft = function(objBlocking) {
-      if(this.onLeftBlock) this.onLeftBlock(objBlocking);
+    this.emitBlockedLeft = function(objBlocking) {
+      callbacks.emit("blockedLeft", objBlocking);
     };
 
     this.verifyFalling = function() {
-      if(this.vel.y < 0 && this.onFalling) this.onFalling();
+      if(this.vel.y < 0) callbacks.emit("falling");
     }
 
     this.collides = function(obj2) {

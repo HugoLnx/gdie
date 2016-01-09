@@ -45,19 +45,19 @@
       if(topOut >= Math.max(bottomOut, leftOut, rightOut)) {
         weak.y = fixed.y + weak.height;
         weak.stopMovementToDownwards();
-        weak.blockedBottom(fixed);
+        weak.emitBlockedBottom(fixed);
       } else if(leftOut >= Math.max(topOut, bottomOut, rightOut)) {
         weak.x = fixed.x - weak.width;
         weak.stopMovementToRight();
-        weak.blockedRight(fixed);
+        weak.emitBlockedRight(fixed);
       } else if(rightOut >= Math.max(topOut, bottomOut, leftOut)) {
         weak.stopMovementToLeft();
         weak.x = fixed.x + fixed.width;
-        weak.blockedLeft(fixed);
+        weak.emitBlockedLeft(fixed);
       } else if(bottomOut >= Math.max(topOut, leftOut, rightOut)) {
         weak.stopMovementToUpwards();
         weak.y = fixed.y - fixed.height;
-        weak.blockedTop(fixed);
+        weak.emitBlockedTop(fixed);
       }
     }
 

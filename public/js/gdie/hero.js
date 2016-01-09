@@ -122,13 +122,12 @@
     });
 
     this.init = function() {
-      // TODO: Use #listen on those events
-      physic.onBottomBlock = function() {
+      physic.listen("blockedBottom", function() {
         statesMachine.applyTransition("land");
-      };
-      physic.onFalling = function() {
+      });
+      physic.listen("falling", function() {
         statesMachine.applyTransition("falling");
-      };
+      });
 
       statesMachine.listen("stateChange", function(newState, transition, previousState) {
         callbacks.emit("stateChange", [newState, direction]);
