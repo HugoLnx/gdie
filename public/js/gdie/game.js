@@ -6,11 +6,9 @@
   namespace.Game = function() {
     var self = this;
     this.universe = new UniversalPhysic();
-    this.samus =  new Samus(100, 480);
+    this.heroes = {};
 
     this.init = function() {
-      self.samus.init();
-      self.universe.push(self.samus.physic());
       self.universe.push(new SolidPhysicObject(150, 200, 100, 20, "fixed")); // ground
       self.universe.push(new SolidPhysicObject(200, 350, 100, 20, "fixed")); // ground
       self.universe.push(new SolidPhysicObject(450, 400, 100, 20, "fixed")); // ground
@@ -20,7 +18,21 @@
 
     this.update = function() {
       self.universe.update();
-      self.samus.update();
+      for(var id in self.heroes) {
+        self.heroes[id].update();
+      }
+    };
+
+    this.bornHero = function(id) {
+      var samus = new Samus(100, 480);
+      self.universe.push(samus.physic());
+      samus.id = id;
+      self.heroes[id] = samus;
+      return samus;
+    };
+
+    this.killHero = function(id) {
+      delete self.heroes[id];
     };
   };
 }(typeof(LNXGdie) === "undefined" ? LNXGdie = {} : LNXGdie));

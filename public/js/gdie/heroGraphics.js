@@ -10,7 +10,7 @@
     var animationName = null;
 
     function init() {
-      tex = PIXI.loader.resources["./img/metroid2.png"].texture;
+      tex = PIXI.loader.resources["./img/metroid2.png"].texture.clone();
       sprite = new PIXI.Sprite(tex);
       animations = createAnimationsFor(sprite);
       sprite.x = -9999;
@@ -32,6 +32,10 @@
       }
       animationName = animName;
     }
+
+    this.hide = function() {
+      sprite.visible = false;
+    };
 
     function animationNameFor(state, direction) {
       var animationPrefix = {

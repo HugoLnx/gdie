@@ -11,6 +11,13 @@
     this.vel = {x: 0, y: 0};
     this.accel = {x: 0, y: 0};
 
+    this.set = function(props) {
+      this.x = props.x;
+      this.y = props.y;
+      this.vel = props.vel;
+      this.accel = props.accel;
+    };
+
     this.velocityX = function(newX) {
       this.vel.x = newX;
     };

@@ -7,16 +7,6 @@
   </head>
   <body>
     <script src="/lib/primus.js"></script>
-    <script>
-      var primus = Primus.connect();
-      primus.on("data", function(data) {
-        console.log("data received", data);
-      });
-      primus.on("update", function(data) {
-        console.log("update received", data);
-      });
-      primus.write({browserMessage: "Hello Server!"});
-    </script>
     <script src="/lib/pixi-v3.js"></script>
 
     <script src="/js/commons/callbackHelper.js"></script>

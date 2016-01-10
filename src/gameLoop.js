@@ -8,14 +8,6 @@ require("../public/js/gdie/game.js");
 var game = new LNXGdie.Game();
 exports.game = game;
 exports.start = function() {
-  game.samus.listen("stateChange", function(newState, direction) {
-    console.log("statusChange samus");
-  });
-
-  game.samus.physic().listen("update", function() {
-    console.log("update physic samus", this.y);
-  });
-
   game.init();
   callFPS(update, 60)
 };

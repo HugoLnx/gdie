@@ -143,6 +143,14 @@
       statesMachine.executeCurrentState();
     };
 
+    this.set = function(props) {
+      statesMachine.set(props.state);
+      direction = props.direction;
+      callbacks.emit("stateChange", [props.state, props.direction]);
+    };
+
     this.physic = function(){ return physic; };
+    this.state = function(){ return statesMachine.state(); };
+    this.direction = function(){ return direction; };
   };
 }(typeof(LNXGdie) === "undefined" ? LNXGdie = {} : LNXGdie));

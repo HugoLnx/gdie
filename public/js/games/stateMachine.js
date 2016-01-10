@@ -25,6 +25,10 @@
       executeState(current);
     };
 
+    this.set = function(s) {
+      current = s;
+    };
+
     function executeState(theState) {
       var stateAction = states[theState].action;
       if(typeof(stateAction) === "function") {

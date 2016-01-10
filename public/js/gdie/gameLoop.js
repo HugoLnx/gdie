@@ -3,16 +3,16 @@
   var Controls = LNXGames.Controls;
   var SamusGraphics = LNXGdie.HeroGraphics;
 
-  namespace.GameLoop = function() {
+  namespace.GameLoop = function(primus) {
     var container = null;
     var renderer = null;
     var self = this;
     var game = null;
-    var samusGraphics = null;
+    var graphics = [];
+    var mainHero = null;
 
     this.start = function() {
       container = new PIXI.Container();
-      samusGraphics = new SamusGraphics(container);
       renderer = PIXI.autoDetectRenderer(640, 480, {
         backgroundColor: 0x004020
       });
@@ -34,38 +34,82 @@
         obj.sprite.y = 480-obj.y;
       });
 
-      game.samus.listen("stateChange", function(newState, direction) {
-        samusGraphics.changeAnimationToCompatibleWithState(newState, direction);
-      });
-
-      game.samus.physic().listen("update", function() {
-        samusGraphics.update(this.x-10, 480-this.y);
+      primus.on("data", function(data) {
+        var hero = game.heroes[data.id];
+        if(data.evt === "stateChange") {
+          hero.set(data);
+        } else if(data.evt === "physic") {
+          game.heroes[data.id].physic().set(data);
+        } else if(data.evt === "bornHero") {
+          console.log(data);
+          if(data.mainHero) {
+            mainHero = newHero(data.id);
+          } else {
+            newHero(data.id)
+          }
+        } else if(data.evt === "killHero") {
+          rmHero(data.id);
+        } else {
+          console.log("dont recognize event: ", data);
+        }
       });
 
       game.init();
       requestAnimationFrame(self.update);
     };
+    
+    function newHero(id) {
+      var samusGraphics = new SamusGraphics(container);
+      var samus = game.bornHero();
+      samus.id = id;
+      samus.listen("stateChange", function(newState, direction) {
+        samusGraphics.changeAnimationToCompatibleWithState(newState, direction);
+      });
+
+      samus.physic().listen("update", function() {
+        //console.log(samus.id, this.x, this.y);
+        samusGraphics.update(this.x-10, 480-this.y);
+      });
+      samus.init();
+      game.heroes[samus.id] = samus;
+      graphics[samus.id] = samusGraphics;
+      return samus;
+    };
+
+    function rmHero(id) {
+      game.heroes[id].physic().update = function(){};
+      delete game.heroes[id];
+      graphics[id].hide();
+      delete graphics[id];
+    }
 
     this.update = function() {
       requestAnimationFrame(self.update);
       if(Controls.isPressed("right")) {
-        game.samus.act("moveRight");
+        sendAct("moveRight");
       } else if(Controls.isPressed("left")) {
-        game.samus.act("moveLeft");
+        sendAct("moveLeft");
       } else {
-        game.samus.act("stop");
+        sendAct("stop");
       }
 
       if(Controls.wasPressed("up")) {
-        game.samus.act("jump");
+        sendAct("jump");
       }
 
       if(Controls.wasReleased("up")) {
-        game.samus.act("fall");
+        sendAct("fall");
       }
 
       game.update();
       renderer.render(container);
+    };
+
+    function sendAct(name) {
+      if(mainHero) {
+        primus.write({id: mainHero.id, transition: name});
+        mainHero.act(name);
+      }
     };
   };
 }(typeof(LNXGdie) === "undefined" ? LNXGdie = {} : LNXGdie));
