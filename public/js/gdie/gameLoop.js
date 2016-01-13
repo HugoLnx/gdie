@@ -56,6 +56,7 @@
 
       game.init();
       requestAnimationFrame(self.update);
+      primus.open();
     };
     
     function newHero(id) {

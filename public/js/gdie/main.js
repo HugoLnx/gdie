@@ -1,5 +1,5 @@
 (function(){
-  var primus = Primus.connect();
+  var primus = Primus.connect({manual: true});
 
   PIXI.loader
    .add("./img/metroid2.png")
