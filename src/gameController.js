@@ -7,13 +7,13 @@ require("../public/js/gdie/game.js");
 
 var callFPS = require("./utils").callFPS;
 
-exports.GameController = function(game) {
+module.exports = function(game, client) {
   this.startGameLoop = function() {
     callFPS(game.update, 60)
   };
 
   // use slavesController instead of client
-  this.newPlayer = function(playerId, client) {
+  this.newPlayer = function(playerId) {
     var hero = game.bornHero(playerId);
     hero.listen("stateChange", function(newState, direction) {
       client.sendStateChange(playerId, newState, direction);

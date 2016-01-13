@@ -1,8 +1,9 @@
 var express = require('express'),
     Primus = require("primus");
 
-var GameController = require("./src/gameController.js").GameController;
-var MasterSocketServer = require("./src/masterSocketServer.js").MasterSocketServer;
+var GameController = require("./src/gameController.js");
+var GameServer = require("./src/gameServer.js");
+var ClientsChannel = require("./src/clientsChannel.js");
 
 var app = express();
 app.use(express.static('public'));
@@ -19,8 +20,9 @@ var server = app.listen(3000, function () {
 function configWebsocketServerAttachedTo(httpServer) {
   var primus = new Primus(httpServer, { parser: "JSON" } );
   var game = new LNXGdie.Game().init();
-  var socketServer = new MasterSocketServer(primus);
-  var gameController = new GameController(game);
+  var clientsChannel = new ClientsChannel(primus);
+  var socketServer = new GameServer(primus, clientsChannel);
+  var gameController = new GameController(game, clientsChannel);
   socketServer.listen("newPlayer", gameController.newPlayer);
   socketServer.listen("removePlayer", gameController.removePlayer);
   socketServer.listen("heroAction", gameController.heroAction);

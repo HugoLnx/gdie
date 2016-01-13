@@ -1,4 +1,4 @@
-exports.SlavesClient = function(primus) {
+module.exports = function() {
   var sparks = {};
 
   this.push = function(spark) {
