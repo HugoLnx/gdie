@@ -32,6 +32,7 @@
     };
 
     this.killHero = function(id) {
+      self.universe.remove(self.heroes[id].physic());
       delete self.heroes[id];
     };
   };

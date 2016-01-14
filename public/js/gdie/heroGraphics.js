@@ -33,8 +33,9 @@
       animationName = animName;
     }
 
-    this.hide = function() {
-      sprite.visible = false;
+    this.destroy = function() {
+      container.removeChild(sprite);
+      sprite.destroy();
     };
 
     function animationNameFor(state, direction) {

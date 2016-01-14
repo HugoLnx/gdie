@@ -17,6 +17,6 @@ module.exports = function(primus, client) {
   primus.on("disconnection", function(spark) {
     console.log("disconnected", spark.id);
     client.remove(spark);
-    callbacks.emit("removePlayer", client);
+    callbacks.emit("removePlayer", spark.id);
   });
 };

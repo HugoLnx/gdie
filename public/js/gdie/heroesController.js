@@ -21,10 +21,9 @@
     };
 
     this.destroy = function(playerId) {
-      heroes[id].physic().update = function(){};
-      delete game.heroes[id];
-      graphics[id].hide();
-      delete graphics[id];
+      game.killHero(playerId);
+      graphics[playerId].destroy();
+      delete graphics[playerId];
     };
 
     this.act = function(action) {

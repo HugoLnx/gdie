@@ -3,37 +3,44 @@
 
   namespace.UniversalPhysic = function() {
     var callbacks = Callbacks.initializeFor(this);
-    var weakObjects = [];
+    var weakObjectId = 0;
+    var weakObjects = {};
     var fixedObjects = [];
 
     this.push = function(obj) {
       if(obj.type === "fixed") {
         fixedObjects.push(obj);
       } else {
-        weakObjects.push(obj);
+        weakObjects[weakObjectId] = obj;
+        obj.id = weakObjectId;
+        weakObjectId += 1;
       }
       obj.emitOnUniverse();
       callbacks.emit("objectPushed", obj);
     };
 
+    this.remove = function(obj) {
+      delete weakObjects[obj.id];
+    };
+
     this.update = function() {
-      for(var i = 0; i < weakObjects.length; i++) {
-        weakObjects[i].update();
-        applyTo(weakObjects[i]);
+      for(var id in weakObjects) {
+        weakObjects[id].update();
+        applyTo(weakObjects[id]);
       }
 
-      for(var i = 0; i < weakObjects.length; i++) {
+      for(var id in weakObjects) {
         for(var j = 0; j < fixedObjects.length; j++) {
-          var weak = weakObjects[i];
+          var weak = weakObjects[id];
           var fixed = fixedObjects[j];
           treatCollision(weak.collides(fixed));
         }
       }
 
-      for(var i = 0; i < weakObjects.length; i++) {
-        weakObjects[i].verifyFalling();
-        weakObjects[i].emitUpdated();
-        callbacks.emit("objectUpdated", weakObjects[i]);
+      for(var id in weakObjects) {
+        weakObjects[id].verifyFalling();
+        weakObjects[id].emitUpdated();
+        callbacks.emit("objectUpdated", weakObjects[id]);
       }
     };
 
