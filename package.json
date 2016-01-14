@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
   },
-	"devDependencies" : {
+	"dependencies" : {
 		"express" : "^4.13.3",
 		"primus" : "^4.0.4",
     "ws": "^1.0.1"
