@@ -22,10 +22,14 @@ function configWebsocketServerAttachedTo(httpServer) {
   var game = new LNXGdie.Game().init();
   var clientsChannel = new ClientsChannel(primus);
   var socketServer = new GameServer(primus, clientsChannel);
-  var gameController = new GameController(game, clientsChannel);
+  var stateBuffer = new StateBuffer();
+  var gameController = new GameController(game, stateBuffer);
   socketServer.listen("newPlayer", gameController.newPlayer);
   socketServer.listen("removePlayer", gameController.removePlayer);
   socketServer.listen("heroAction", gameController.heroAction);
   gameController.startGameLoop();
+  updateLoop();
 }
 
+function updateLoop() {
+};

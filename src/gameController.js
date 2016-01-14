@@ -7,7 +7,7 @@ require("../public/js/gdie/game.js");
 
 var callFPS = require("./utils").callFPS;
 
-module.exports = function(game, client) {
+module.exports = function(game, statesBuffer) {
   this.startGameLoop = function() {
     callFPS(game.update, 60)
   };
