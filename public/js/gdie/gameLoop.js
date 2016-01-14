@@ -23,6 +23,8 @@
         sprite.beginFill(0x995555);
         sprite.drawRect(0, 0, obj.width, obj.height);
         sprite.endFill();
+        sprite.x = obj.x;
+        sprite.y = 480-obj.y;
         obj.sprite = sprite;
         if(obj.type !== "weak") {
           container.addChild(sprite);

@@ -3,32 +3,37 @@
 
   namespace.UniversalPhysic = function() {
     var callbacks = Callbacks.initializeFor(this);
-    var objects = [];
+    var weakObjects = [];
+    var fixedObjects = [];
 
     this.push = function(obj) {
-      objects.push(obj);
+      if(obj.type === "fixed") {
+        fixedObjects.push(obj);
+      } else {
+        weakObjects.push(obj);
+      }
       obj.emitOnUniverse();
       callbacks.emit("objectPushed", obj);
     };
 
     this.update = function() {
-      for(var i = 0; i < objects.length; i++) {
-        objects[i].update();
-        applyTo(objects[i]);
+      for(var i = 0; i < weakObjects.length; i++) {
+        weakObjects[i].update();
+        applyTo(weakObjects[i]);
       }
 
-      for(var i = 0; i < objects.length-1; i++) {
-        for(var j = i+1; j < objects.length; j++) {
-          var obj1 = objects[i];
-          var obj2 = objects[j];
-          treatCollision(obj1.collides(obj2));
+      for(var i = 0; i < weakObjects.length; i++) {
+        for(var j = 0; j < fixedObjects.length; j++) {
+          var weak = weakObjects[i];
+          var fixed = fixedObjects[j];
+          treatCollision(weak.collides(fixed));
         }
       }
 
-      for(var i = 0; i < objects.length; i++) {
-        objects[i].verifyFalling();
-        objects[i].emitUpdated();
-        callbacks.emit("objectUpdated", objects[i]);
+      for(var i = 0; i < weakObjects.length; i++) {
+        weakObjects[i].verifyFalling();
+        weakObjects[i].emitUpdated();
+        callbacks.emit("objectUpdated", weakObjects[i]);
       }
     };
 
@@ -62,16 +67,14 @@
     }
 
     function applyTo(obj) {
-      if(obj.type !== "fixed") {
-        var gravity = -0.05;
-        var horizontalResistence = 0.03;
-        if(obj.vel.y > -10) {
-          obj.force(0, gravity);
-        } else {
-          obj.forceToZero(0, 10);
-        }
-        obj.forceToZero(0.03, 0);
+      var gravity = -0.05;
+      var horizontalResistence = 0.03;
+      if(obj.vel.y > -10) {
+        obj.force(0, gravity);
+      } else {
+        obj.forceToZero(0, 10);
       }
+      obj.forceToZero(0.03, 0);
     };
   };
 }(typeof(LNXGames) === "undefined" ? LNXGames = {} : LNXGames));
