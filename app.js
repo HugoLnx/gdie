@@ -37,7 +37,7 @@ var utils = require("./src/utils.js");
 var eventBuilder = require("./src/eventBuilder.js");
 function ClientsUpdater(clientsChannel, stateBuffer, game) {
   this.startLoop = function() {
-    utils.callFPS(sendToClient, 20);
+    utils.callFPS(sendToClient, 60);
   };
 
   function sendToClient() {

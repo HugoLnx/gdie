@@ -48,7 +48,6 @@
 
     this.update = function() {
       requestAnimationFrame(self.update);
-
       var rightWasReleased = Controls.wasReleased("right");
       var leftWasReleased = Controls.wasReleased("left");
       if((rightWasReleased && Controls.isReleased("left")) ||

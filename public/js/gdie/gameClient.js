@@ -23,6 +23,10 @@
       }
     });
 
+    this.latency = function() {
+      return primus.latency;
+    };
+
     this.openConnection = function() {
       primus.open();
     };

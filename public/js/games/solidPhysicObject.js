@@ -54,10 +54,10 @@
     };
 
     this.update = function() {
+      this.x += this.vel.x + this.accel.x/2.0;
+      this.y += this.vel.y + this.accel.y/2.0;
       this.vel.x += this.accel.x;
       this.vel.y += this.accel.y;
-      this.x += this.vel.x;
-      this.y += this.vel.y;
     };
 
     this.emitUpdated = function() {

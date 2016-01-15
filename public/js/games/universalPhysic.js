@@ -39,11 +39,8 @@
 
       for(var id in weakObjects) {
         weakObjects[id].verifyFalling();
-        var changed = weakObjects[id].flushState();
-        if(changed) {
-          weakObjects[id].emitUpdated();
-          callbacks.emit("objectUpdated", [weakObjects[id]]);
-        }
+        weakObjects[id].emitUpdated();
+        callbacks.emit("objectUpdated", [weakObjects[id]]);
       }
     };
 

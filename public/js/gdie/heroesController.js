@@ -2,15 +2,24 @@
   var SamusGraphics = LNXGdie.HeroGraphics;
 
   namespace.HeroesController = function(game, container, client) {
+    var ignoreServer = false;
     var heroes = game.heroes;
     var graphics = [];
     var mainHero = null;
 
     this.updateState = function(playerId, heroState) {
+      if(ignoreServer) return;
       heroes[playerId].set(heroState);
     };
 
     this.updatePhysic = function(playerId, physicProperties) {
+      if(ignoreServer) return;
+      var data = physicProperties;
+      var lat = client.latency() * 0.06;
+      data.x += data.vel.x*lat + data.accel.x;
+      data.y += data.vel.y*lat + data.accel.y;
+      data.vel.x += data.accel.x*lat
+      data.vel.y += data.accel.y*lat
       heroes[playerId].physic().set(physicProperties);
     };
 
@@ -29,6 +38,10 @@
     this.act = function(action) {
       if(mainHero) {
         client.sendHeroAction(mainHero.id, action)
+        ignoreServer = true;
+        setTimeout(function() {
+          ignoreServer = false;
+        }, client.latency());
         mainHero.act(action);
       }
     };
