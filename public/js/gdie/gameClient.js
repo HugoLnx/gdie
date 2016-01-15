@@ -11,8 +11,15 @@
 
     primus.on("data", function(data) {
       for(var playerId in data) {
-        var playerData = data[playerId];
-        emitEventFor(playerId, playerData);
+        var playerEvents = data[playerId];
+        var bornEvent = playerEvents.bornHero;
+        if(bornEvent) {
+          delete playerEvents.bornHero;
+          emitEventFor(playerId, 'bornHero', bornEvent);
+        }
+        for(evt in playerEvents) {
+          emitEventFor(playerId, evt, playerEvents[evt]);
+        }
       }
     });
 
@@ -20,17 +27,17 @@
       primus.open();
     };
 
-    function emitEventFor(playerId, data) {
-      if(data.evt === "stateChange") {
+    function emitEventFor(playerId, evt, data) {
+      if(evt === "stateChange") {
         callbacks.emit("stateChange", [playerId, data]);
-      } else if(data.evt === "physic") {
+      } else if(evt === "physicChange") {
         callbacks.emit("physicChange", [playerId, data]);
-      } else if(data.evt === "bornHero") {
+      } else if(evt === "bornHero") {
         callbacks.emit("bornHero", [playerId, data.mainHero]);
-      } else if(data.evt === "killHero") {
+      } else if(evt === "killHero") {
         callbacks.emit("killHero", data.id);
       } else {
-        console.log("dont recognize event: ", data);
+        console.log("dont recognize event: ", evt, data);
       }
     }
   };

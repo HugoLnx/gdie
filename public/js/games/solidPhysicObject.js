@@ -3,6 +3,7 @@
 
   namespace.SolidPhysicObject = function(x, y, width, height, type) {
     var callbacks = Callbacks.initializeFor(this);
+    var self = this;
     this.x = x;
     this.y = y;
     this.width = width;
@@ -10,6 +11,7 @@
     this.type = type;
     this.vel = {x: 0, y: 0};
     this.accel = {x: 0, y: 0};
+    var saved = {vel: {}, accel: {}};
 
     this.set = function(props) {
       this.x = props.x;
@@ -129,6 +131,28 @@
 
         return {solidWeakObject: weak, solidFixedObject: fixed}
       }
+    };
+
+    this.flushState = function() {
+      var changed = (
+        this.x !== saved.x ||
+        this.y !== saved.y ||
+        this.vel.x !== saved.vel.x ||
+        this.vel.y !== saved.vel.y ||
+        this.accel.x !== saved.accel.x ||
+        this.accel.y !== saved.accel.y
+      );
+
+      saveState();
+      return changed;
+    };
+
+    function saveState() {
+      saved = {
+        x: self.x, y: self.y,
+        vel: {x: self.vel.x, y: self.vel.y},
+        accel: {x: self.accel.x, y: self.accel.y}
+      };
     };
   };
 }(typeof(LNXGames) === "undefined" ? LNXGames = {} : LNXGames));

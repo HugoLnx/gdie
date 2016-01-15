@@ -4,6 +4,7 @@ var express = require('express'),
 var GameController = require("./src/gameController.js");
 var GameServer = require("./src/gameServer.js");
 var ClientsChannel = require("./src/clientsChannel.js");
+var StateBuffer = require("./src/stateBuffer.js");
 
 var app = express();
 app.use(express.static('public'));
@@ -28,8 +29,46 @@ function configWebsocketServerAttachedTo(httpServer) {
   socketServer.listen("removePlayer", gameController.removePlayer);
   socketServer.listen("heroAction", gameController.heroAction);
   gameController.startGameLoop();
-  updateLoop();
+  new ClientsUpdater(clientsChannel, stateBuffer, game).startLoop();
 }
 
-function updateLoop() {
-};
+
+var utils = require("./src/utils.js");
+var eventBuilder = require("./src/eventBuilder.js");
+function ClientsUpdater(clientsChannel, stateBuffer, game) {
+  this.startLoop = function() {
+    utils.callFPS(sendToClient, 20);
+  };
+
+  function sendToClient() {
+    if(stateBuffer.isNotEmpty()) {
+      var deltaPerClient = adaptToEachClient(stateBuffer.flush());
+      clientsChannel.sendStateUpdate(deltaPerClient);
+    }
+  };
+
+  function adaptToEachClient(deltaState) {
+    var deltaPerClient = {"default": deltaState};
+
+    for(var playerId in deltaState) {
+      var playerEvents = deltaState[playerId];
+      if(playerEvents.bornHero !== undefined) {
+        deltaPerClient[playerId] = buildGameStateDeltaFromZeroTo(playerId);
+      }
+    }
+    return deltaPerClient;
+  }
+
+  function buildGameStateDeltaFromZeroTo(playerId) {
+    var deltaState = {};
+    for(var heroId in game.heroes) {
+      var hero = game.heroes[heroId];
+      var events = {}
+      eventBuilder.bindBornHero(events, heroId === playerId),
+      eventBuilder.bindStateChange(events, hero.state(), hero.direction()),
+      eventBuilder.bindPhysicChange(events, hero.physic())
+      deltaState[hero.id] = events;
+    }
+    return deltaState;
+  }
+}
