@@ -10,7 +10,7 @@ module.exports = function(primus, client) {
     callbacks.emit("newPlayer", spark.id);
 
     spark.on("data", function(data) {
-      callbacks.emit("heroAction", [spark.id, data.transition]);
+      callbacks.emit("heroAction", [spark.id, data]);
     });
   });
 

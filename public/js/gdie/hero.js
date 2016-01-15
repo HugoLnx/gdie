@@ -83,7 +83,7 @@
           },
           transitions: {
             "falling": "falling-moving",
-            "fall": "falling-still",
+            "fall": "falling-moving",
             "stop": "on-the-air-still",
             "land": "running",
             "moveLeft": "on-the-air-moving",

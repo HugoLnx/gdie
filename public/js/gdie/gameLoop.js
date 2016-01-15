@@ -48,12 +48,20 @@
 
     this.update = function() {
       requestAnimationFrame(self.update);
-      if(Controls.isPressed("right")) {
-        heroes.act("moveRight");
-      } else if(Controls.isPressed("left")) {
-        heroes.act("moveLeft");
-      } else {
+
+      var rightWasReleased = Controls.wasReleased("right");
+      var leftWasReleased = Controls.wasReleased("left");
+      if((rightWasReleased && Controls.isReleased("left")) ||
+         (leftWasReleased && Controls.isReleased("right"))) {
         heroes.act("stop");
+      }
+
+      if(Controls.wasPressed("right") ||
+          (Controls.isPressed("right") && leftWasReleased)) {
+        heroes.act("moveRight");
+      } else if(Controls.wasPressed("left") ||
+          (Controls.isPressed("left") && rightWasReleased)) {
+        heroes.act("moveLeft");
       }
 
       if(Controls.wasPressed("up")) {
@@ -63,6 +71,7 @@
       if(Controls.wasReleased("up")) {
         heroes.act("fall");
       }
+
 
       game.update();
       renderer.render(container);

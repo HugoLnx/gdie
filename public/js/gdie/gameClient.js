@@ -6,7 +6,7 @@
     var primus = Primus.connect({manual: true});
 
     this.sendHeroAction = function(playerId, action) {
-      primus.write({id: playerId, transition: action});
+      primus.write(action);
     };
 
     primus.on("data", function(data) {
@@ -35,7 +35,7 @@
       } else if(evt === "bornHero") {
         callbacks.emit("bornHero", [playerId, data.mainHero]);
       } else if(evt === "killHero") {
-        callbacks.emit("killHero", data.id);
+        callbacks.emit("killHero", playerId);
       } else {
         console.log("dont recognize event: ", evt, data);
       }
