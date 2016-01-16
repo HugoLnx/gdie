@@ -43,8 +43,8 @@
         "jumping-moving" : {
           action: function() {
             physic.noForces();
-            var upImpulse = 0.7;
-            var frontImpulse = 4;
+            var upImpulse = 9;
+            var frontImpulse = 7;
             if(direction === "right") {
               physic.force(frontImpulse, upImpulse);
             } else {
@@ -56,7 +56,7 @@
         "jumping-still" : {
           action: function() {
             physic.noForces();
-            var upImpulse = 0.8;
+            var upImpulse = 12;
             physic.force(0, upImpulse);
           },
           immediateTransition: "on-the-air-still"
@@ -76,9 +76,9 @@
         "on-the-air-moving" : {
           action: function() {
             if(direction === "right") {
-              physic.velocityX(JUMPING_VEL);
+              physic.velocityXMin(JUMPING_VEL);
             } else {
-              physic.velocityX(-1*JUMPING_VEL);
+              physic.velocityXMax(-1*JUMPING_VEL);
             }
           },
           transitions: {

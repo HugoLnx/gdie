@@ -74,14 +74,12 @@
     }
 
     function applyTo(obj) {
-      var gravity = -0.05;
-      var horizontalResistence = 0.03;
       if(obj.vel.y > -10) {
+        var gravity = -0.5;
         obj.force(0, gravity);
       } else {
-        obj.forceToZero(0, 10);
+        obj.velocityY(-10);
       }
-      obj.forceToZero(0.03, 0);
     };
   };
 }(typeof(LNXGames) === "undefined" ? LNXGames = {} : LNXGames));

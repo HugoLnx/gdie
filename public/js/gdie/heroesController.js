@@ -16,10 +16,8 @@
       if(ignoreServer) return;
       var data = physicProperties;
       var lat = client.latency() * 0.06;
-      data.x += data.vel.x*lat + data.accel.x;
-      data.y += data.vel.y*lat + data.accel.y;
-      data.vel.x += data.accel.x*lat
-      data.vel.y += data.accel.y*lat
+      data.vel.x += data.vel.x*lat
+      data.vel.y += data.vel.y*lat
       heroes[playerId].physic().set(physicProperties);
     };
 

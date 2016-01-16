@@ -7,7 +7,7 @@ exports.bindStateChange = function(events, newState, direction) {
 };
 
 exports.bindPhysicChange = function(events, physic) {
-  events.physicChange = {x: physic.x, y: physic.y, vel: physic.vel, accel: physic.accel};
+  events.physicChange = {x: physic.x, y: physic.y, vel: physic.vel};
 };
 
 exports.bindKillHero = function(events) {
